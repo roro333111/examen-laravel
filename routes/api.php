@@ -12,4 +12,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    /*Route::get('/telefonos', [TelefonoController::class, 'index']);      // listar
+    Route::get('/telefonos/{id}', [TelefonoController::class, 'show']);   // uno
+    Route::post('/telefonos', [TelefonoController::class, 'store']);      // crear
+    Route::put('/telefonos/{id}', [TelefonoController::class, 'update']); // actualizar
+    Route::delete('/telefonos/{id}', [TelefonoController::class, 'destroy']); // borrar*/
+
 });
