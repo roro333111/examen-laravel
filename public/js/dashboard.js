@@ -26,6 +26,7 @@ async function cargarUsuario(){
     }
 
     const user = await response.json();
+    console.log(user);
 
     document.getElementById('saludo').innerText =
         'Bienvenido ' + user.name;
@@ -33,9 +34,7 @@ async function cargarUsuario(){
 
 cargarUsuario();
 
-document
-.getElementById('logout')
-.addEventListener('click', async ()=>{
+document.getElementById('logout').addEventListener('click', async ()=>{
 
     await fetch('/api/logout', {
 
