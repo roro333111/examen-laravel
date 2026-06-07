@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProjectController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -12,10 +13,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    /*Route::get('/telefonos', [TelefonoController::class, 'index']);      // listar
-    Route::get('/telefonos/{id}', [TelefonoController::class, 'show']);   // uno
-    Route::post('/telefonos', [TelefonoController::class, 'store']);      // crear
-    Route::put('/telefonos/{id}', [TelefonoController::class, 'update']); // actualizar
-    Route::delete('/telefonos/{id}', [TelefonoController::class, 'destroy']); // borrar*/
+    Route::get('/projectes', [ProjectController::class, 'index']);      // listar
+    Route::get('/projectes/{id}', [ProjectController::class, 'show']);   // uno
+    Route::post('/projectes', [ProjectController::class, 'store']);      // crear
+    Route::put('/projectes/{id}', [ProjectController::class, 'update']); // actualizar
+    Route::delete('/projectes/{id}', [ProjectController::class, 'destroy']); // borrar
+
+    Route::get('/latestProjecte', [ProjectController::class, 'latestProject']);   // uno
 
 });

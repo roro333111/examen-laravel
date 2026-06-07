@@ -5,8 +5,6 @@ const headers = {
     'Authorization': 'Bearer ' + token
 };
 
-
-
 // LISTAR TODOS
 fetch('/api/telefonos', {
     method: 'GET',

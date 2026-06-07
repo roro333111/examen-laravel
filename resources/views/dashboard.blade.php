@@ -1,19 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="ca">
+
 <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <title>DAW</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #111;
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>Dashboard</h1>
+    <header>
+        <h1>GESTOR DELS MEUS PROJECTES</h1>
+    </header>
 
-    <p id="saludo"></p>
+    <main class="layout">
+        <p id="saludo">
 
-    <button id="logout">
-        Cerrar sesión
-    </button>
+        </p>
+
+        <aside class="sidebar">
+            <h2>Llistat del meus projectes</h2>
+        </aside>
+
+        <article class="featured">
+            Projecte 1: És el projecte més nou
+        </article>
+
+        <section class="news">
+
+        </section>
+        
+        <a id="editarProjecte" href="#">
+            Editar Projecte
+        </a>
+        <br>
+        <a href="/createProject">
+            Crear Projecte
+        </a>
+        <br>
+        <button id="logout">
+            Cerrar sesión
+        </button>
+    </main>
+
+    <footer>
+        <p>Examen DAW - Layout Responsive sense media queries</p>
+    </footer>
 
     <script src="/js/dashboard.js"></script>
 
 </body>
+
 </html>
