@@ -15,7 +15,7 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'Credenciales incorrectas'
+                'message' => 'Credencials incorrectes'
             ], 401);
         }
 
@@ -37,7 +37,13 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Logout correcto'
+            'message' => 'Logout correcte'
         ]);
+    }
+
+    public function users()
+    {
+        $users = User::all();
+        return response()->json($users);
     }
 }

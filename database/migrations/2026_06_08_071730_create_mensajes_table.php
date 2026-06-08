@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('mensajes', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->text('descripcio');
-            $table->date('data_ini');
-            $table->date('data_fi');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->text('asunto');
+            $table->text('mensaje');
+            $table->boolean('leido')->default(false);
+            $table->foreignId('destinatario_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('remitente_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('mensajes');
     }
 };

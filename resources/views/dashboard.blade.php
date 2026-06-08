@@ -10,10 +10,25 @@
             font-family: Arial, sans-serif;
             background: #f4f4f4;
         }
+        table{
+            border-collapse: collapse;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        table td{
+            padding: 8px;
+        }
 
-        header {
-            background: #111;
-            color: white;
+        #entrada, #sortida{
+            margin: 0px 10px;
+        }
+
+        .read{
+            color: #6ffa8f;
+        }
+        .noRead{
+            color: #fa6f6f;
         }
     </style>
 </head>
@@ -21,42 +36,33 @@
 <body>
 
     <header>
-        <h1>GESTOR DELS MEUS PROJECTES</h1>
+        <h1>GESTOR DE MISSATGES</h1>
     </header>
 
     <main class="layout">
         <p id="saludo">
 
         </p>
-
-        <aside class="sidebar">
-            <h2>Llistat del meus projectes</h2>
-        </aside>
-
-        <article class="featured">
-            Projecte 1: És el projecte més nou
-        </article>
-
-        <section class="news">
-
-        </section>
-        
-        <a id="editarProjecte" href="#">
-            Editar Projecte
-        </a>
-        <br>
-        <a href="/createProject">
-            Crear Projecte
-        </a>
-        <br>
         <button id="logout">
-            Cerrar sesión
+            Tancar sessió
         </button>
-    </main>
+        <a id="entrada">
+            Misatges d'entrada
+        </a>
+        <a id="sortida">
+            Misatges de sortida
+        </a>
 
-    <footer>
-        <p>Examen DAW - Layout Responsive sense media queries</p>
-    </footer>
+        <table id="missatges">
+
+        </table>
+        <br>
+        <a href="/createMessage">
+            nou missatge
+        </a>
+        <br>
+        
+    </main>
 
     <script src="/js/dashboard.js"></script>
 

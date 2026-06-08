@@ -6,35 +6,10 @@ if (!token) {
 
 }
 
-const editProjecte = document.querySelector("#editarProjecte");
-const title = document.querySelector(".featured");
-const tasksContainer = document.querySelector(".news");
+const missatgesContainer = document.querySelector("#missatges");
+let userId;
 
-fetch('/api/latestProjecte', {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-    }
-})
-    .then(r => r.json())
-    .then(projecte => {
-        title.innerText = projecte.nom + ":" + projecte.descripcio;
-        editProjecte.setAttribute("href", "/editProject/" + projecte.id);
-
-        if (!projecte.tasks <= 0) {
-            for (let n = 0; n < projecte.tasks.length; n++) {
-                article = document.createElement("article");
-                article.innerText = projecte.tasks[n].descripcio;
-                tasksContainer.append(article);
-            }
-        }
-
-
-        console.log(projecte);
-    });
-
-async function cargarUsuario() {
+async function cargar() {
 
     const response = await fetch('/api/user', {
 
@@ -54,35 +29,94 @@ async function cargarUsuario() {
     }
 
     const user = await response.json();
+    userId = user.id;
+
     console.log(user);
 
     document.getElementById('saludo').innerText =
-        'Bienvenido ' + user.name;
+        'Hola ' + user.name;
+
+
+    cargarMissatgesEntrada()
 }
 
-cargarUsuario();
+cargar();
 
-const projectContainer = document.querySelector(".sidebar");
-
-fetch('/api/projectes', {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-    }
+document.getElementById('entrada').addEventListener('click', async () => {
+    cargarMissatgesEntrada()
 })
-    .then(r => r.json())
-    .then(projectes => {
-        for (let i = 0; i < projectes.length; i++) {
-            a = document.createElement("a");
-            a.innerText = projectes[i].nom
-            a.dataset.id = projectes[i].id;
-            a.addEventListener('click', () => {
-                cargarProjecteSeleccionat(projectes[i].id)
-            })
-            projectContainer.append(a);
-        }
-    });
+
+document.getElementById('sortida').addEventListener('click', async () => {
+    cargarMissatgesSortida()
+})
+
+function cargarMissatgesEntrada() {
+    missatgesContainer.innerHTML = "";
+
+    fetch('/api/missatgesTeus/' + userId, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+    })
+        .then(r => r.json())
+        .then(data => {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+                const td = document.createElement("td");
+                td.innerText = data[i].created_at + " - " + data[i].remitente.name + " - " + data[i].asunto;
+
+                const a = document.createElement("a");
+                a.innerText = data[i].asunto;
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    cargarMissatgeSeleccionat(data[i].id, 1)
+                });
+                td.innerText = data[i].created_at + " - " + data[i].remitente.name + " - ";
+                td.append(a);
+
+                if (data[i].leido) {
+                    td.classList.add("read");
+                }
+                else {
+                    td.classList.add("noRead");
+                }
+
+                missatgesContainer.append(td);
+            }
+        });
+}
+
+function cargarMissatgesSortida() {
+    missatgesContainer.innerHTML = "";
+
+    fetch('/api/missatgesEnviats/' + userId, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+    })
+        .then(r => r.json())
+        .then(data => {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+                const td = document.createElement("td");
+
+                const a = document.createElement("a");
+                a.innerText = data[i].asunto;
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    cargarMissatgeSeleccionat(data[i].id, 0)
+                });
+                td.innerText = data[i].created_at + " - " + data[i].destinatario.name + " - ";
+                td.append(a);
+
+                missatgesContainer.append(td);
+            }
+        });
+}
 
 document.getElementById('logout').addEventListener('click', async () => {
 
@@ -102,10 +136,25 @@ document.getElementById('logout').addEventListener('click', async () => {
 
 });
 
-function cargarProjecteSeleccionat(id) {
-    tasksContainer.innerHTML = "";
 
-    fetch('/api/projectes/' + id, {
+function cargarMissatgeSeleccionat(id, destinatario) {
+
+    missatgesContainer.innerHTML = "";
+
+    if (destinatario) {
+        fetch('/api/canviarStatusMissatge/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(r => r.json())
+            .then(missatge => console.log(missatge));
+    }
+
+
+    fetch('/api/missatges/' + id, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -113,16 +162,29 @@ function cargarProjecteSeleccionat(id) {
         }
     })
         .then(r => r.json())
-        .then(projecte => {
-            title.innerText = projecte.nom + ":" + projecte.descripcio;
-            editProjecte.setAttribute("href", "/editProject/" + projecte.id);
+        .then(missatge => {
+            console.log(missatge);
+            const div = document.createElement("div");
+            const destinatari = document.createElement("p");
+            destinatari.innerText = "Destinatari: " + missatge.destinatario.name;
+            div.append(destinatari);
 
-            for (let n = 0; n < projecte.tasks.length; n++) {
-                article = document.createElement("article");
-                article.innerText = projecte.tasks[n].descripcio;
-                tasksContainer.append(article);
-            }
+            const remitent = document.createElement("p");
+            remitent.innerText = "Remitent: " + missatge.remitente.name;
+            div.append(remitent);
 
-            console.log(projecte);
+            const data = document.createElement("p");
+            data.innerText = "Data: " + missatge.created_at;
+            div.append(data);
+
+            const asumpte = document.createElement("p");
+            asumpte.innerText = "Asumpte: " + missatge.asunto;
+            div.append(asumpte);
+
+            const mesage = document.createElement("p");
+            mesage.innerText = "Missatge: " + missatge.mensaje;
+            div.append(mesage);
+
+            missatgesContainer.append(div);
         });
 }

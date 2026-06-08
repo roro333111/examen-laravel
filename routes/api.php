@@ -3,22 +3,20 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\MensajeController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/users', [AuthController::class, 'users']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/projectes', [ProjectController::class, 'index']);      // listar
-    Route::get('/projectes/{id}', [ProjectController::class, 'show']);   // uno
-    Route::post('/projectes', [ProjectController::class, 'store']);      // crear
-    Route::put('/projectes/{id}', [ProjectController::class, 'update']); // actualizar
-    Route::delete('/projectes/{id}', [ProjectController::class, 'destroy']); // borrar
-
-    Route::get('/latestProjecte', [ProjectController::class, 'latestProject']);   // uno
-
+    Route::get('/missatges/{id}', [MensajeController::class, 'show']);
+    Route::post('/missatges', [MensajeController::class, 'store']);
+    Route::get('/missatgesTeus/{id}', [MensajeController::class, 'missatgesTeus']);
+    Route::get('/missatgesEnviats/{id}', [MensajeController::class, 'missatgesEnviats']);
+    Route::put('/canviarStatusMissatge/{id}', [MensajeController::class, 'canviarStatusMissatge']);
 });
